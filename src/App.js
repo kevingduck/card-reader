@@ -6,17 +6,19 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { pictures: [] };
+        this.state = { 
+            pictures: [], 
+            output: "" 
+        };
         this.onChange = this.onChange.bind(this);
-        this.runOCR = this.runOCR   .bind(this);
-
+        this.runOCR = this.runOCR.bind(this);
     }
 
     onChange(picture) {
         this.setState({
             pictures: this.state.pictures.concat(picture),
         });
-        console.log("Added picture to state. Recognizing text ...")
+        console.log("Added picture. Click button to read image.")
     }
 
     runOCR() {
@@ -25,6 +27,9 @@ class App extends React.Component {
             'eng',
             { logger: m => console.log(m) }
           ).then(({ data: { text } }) => {
+            this.setState({ 
+                output: text
+            });
             console.log(text);
           })
     }
@@ -40,7 +45,9 @@ class App extends React.Component {
                     imgExtension={['.jpg', '.gif', '.png', '.gif']}
                     maxFileSize={52428800}
                 />
-                <button onClick={this.runOCR}>Run OCR</button>
+                <p>{this.state.output}</p>
+                <button onClick={this.runOCR}>Read Image</button>
+                
             </div>
         );
     }
