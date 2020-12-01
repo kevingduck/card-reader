@@ -38,7 +38,7 @@ class App extends React.Component {
     detectMemberId(text) {
         if (this.state.output.includes("Member")) {
             console.log("Member info detected, scanning for ID ...");
-            var index = this.state.output.indexOf("Member");
+            // var index = this.state.output.indexOf("Member");
             var member_id = this.state.output.split("Member ID: ")[1];
             member_id = member_id.split(" ")[0];
             console.log("Member ID: " + member_id);
