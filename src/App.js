@@ -12,6 +12,7 @@ class App extends React.Component {
         };
         this.onChange = this.onChange.bind(this);
         this.runOCR = this.runOCR.bind(this);
+        this.detectMemberId = this.detectMemberId.bind(this);
     }
 
     onChange(picture) {
@@ -34,6 +35,19 @@ class App extends React.Component {
           })
     }
 
+    detectMemberId(text) {
+        if (this.state.output.includes("Member")) {
+            console.log("Member info detected, scanning for ID ...");
+            var index = this.state.output.indexOf("Member");
+            var member_id = this.state.output.split("Member ID: ")[1];
+            member_id = member_id.split(" ")[0];
+            console.log("Member ID: " + member_id);
+            this.setState({output:member_id});
+          } else {
+              console.log("No member ID found, uploading image for ISR review ...");
+          }
+    }
+
     render() {
         return (
             <div>
@@ -45,9 +59,11 @@ class App extends React.Component {
                     imgExtension={['.jpg', '.gif', '.png', '.gif']}
                     maxFileSize={52428800}
                 />
-                <p>{this.state.output}</p>
+                <p>Found on card: {this.state.output}</p>
                 <button onClick={this.runOCR}>Read Image</button>
-                
+                <button onClick={this.detectMemberId}>Find Member ID</button>
+                <p>{this.state.member_id}</p>
+
             </div>
         );
     }
