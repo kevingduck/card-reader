@@ -8,6 +8,8 @@ class App extends React.Component {
         super(props);
         this.state = { pictures: [] };
         this.onChange = this.onChange.bind(this);
+        this.runOCR = this.runOCR   .bind(this);
+
     }
 
     onChange(picture) {
@@ -15,8 +17,11 @@ class App extends React.Component {
             pictures: this.state.pictures.concat(picture),
         });
         console.log("Added picture to state. Recognizing text ...")
+    }
+
+    runOCR() {
         Tesseract.recognize(
-            'https://tesseract.projectnaptha.com/img/eng_bw.png',            
+            this.state.pictures[0],
             'eng',
             { logger: m => console.log(m) }
           ).then(({ data: { text } }) => {
@@ -30,11 +35,12 @@ class App extends React.Component {
                 <ImageUploader
                     withIcon={true}
                     withPreview={true}
-                    buttonText='Choose images'
+                    buttonText='Choose image'
                     onChange={this.onChange}
                     imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                    maxFileSize={5242880}
+                    maxFileSize={52428800}
                 />
+                <button onClick={this.runOCR}>Run OCR</button>
             </div>
         );
     }
