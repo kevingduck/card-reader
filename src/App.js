@@ -8,7 +8,7 @@ class App extends React.Component {
         super(props);
         this.state = { 
             pictures: [], 
-            output: "" ,
+            output: "(awaiting image upload ...)" ,
             isLoading: false
         };
         this.onChange = this.onChange.bind(this);
@@ -37,7 +37,7 @@ class App extends React.Component {
     }
 
     detectMemberId(text) {
-        this.setState({isLoading:true});
+        // this.setState({isLoading:true});
         if (this.state.output.includes("Member")) {
             try {
                 console.log("Member info detected, scanning for ID ...");
@@ -56,19 +56,23 @@ class App extends React.Component {
     render() {
         return (
             <div>
+                <div>
                 <ImageUploader
-                    withIcon={true}
+                    withIcon={false}
                     withPreview={true}
                     buttonText='Choose image'
                     onChange={this.onChange}
+                    singleImage={true}
                     imgExtension={['.jpg', 'jpeg', '.png', '.gif']}
                     maxFileSize={52428800}
+                    fileContainerStyle={{backgroundColor:'lightblue'}}
                 />
-                <p>Found on card: {this.state.output}</p>
-                <button onClick={this.runOCR}>Read Image</button>
-                <button onClick={this.detectMemberId}>Find Member ID</button>
-                <p>{this.state.member_id}</p>
-
+                </div>
+                <div style={{margin: "auto", width:"50%", alignSelf:'center'}}>
+                    <p>Found on card: {this.state.output}</p>
+                    <button onClick={this.runOCR}>Read Image {this.state.isLoading}</button><br/>
+                    <button onClick={this.detectMemberId}>Find Member ID</button>
+                </div>
             </div>
         );
     }
