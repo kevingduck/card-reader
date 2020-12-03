@@ -8,7 +8,8 @@ class App extends React.Component {
         super(props);
         this.state = { 
             pictures: [], 
-            output: "" 
+            output: "" ,
+            isLoading: false
         };
         this.onChange = this.onChange.bind(this);
         this.runOCR = this.runOCR.bind(this);
@@ -36,16 +37,20 @@ class App extends React.Component {
     }
 
     detectMemberId(text) {
+        this.setState({isLoading:true});
         if (this.state.output.includes("Member")) {
-            console.log("Member info detected, scanning for ID ...");
-            // var index = this.state.output.indexOf("Member");
-            var member_id = this.state.output.split("Member ID: ")[1];
-            member_id = member_id.split(" ")[0];
-            console.log("Member ID: " + member_id);
-            this.setState({output:member_id});
-          } else {
-              console.log("No member ID found, uploading image for ISR review ...");
-          }
+            try {
+                console.log("Member info detected, scanning for ID ...");
+                // var index = this.state.output.indexOf("Member");
+                // TODO: add conditionals for member, member ID, etc.
+                var member_id = this.state.output.split("Member ID: ")[1];
+                member_id = member_id.split(" ")[0];
+                console.log("Member ID: " + member_id);
+                this.setState({output:member_id});
+            }   catch {
+                    console.log("No member ID found, uploading image for ISR review ...");
+            }
+          } 
     }
 
     render() {
@@ -56,7 +61,7 @@ class App extends React.Component {
                     withPreview={true}
                     buttonText='Choose image'
                     onChange={this.onChange}
-                    imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                    imgExtension={['.jpg', 'jpeg', '.png', '.gif']}
                     maxFileSize={52428800}
                 />
                 <p>Found on card: {this.state.output}</p>
